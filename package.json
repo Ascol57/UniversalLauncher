@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple Minecraft launcher built with Electron and minecraft-java-core.",
   "main": "index.js",
+  "author": "Ascol57 <constant.rusche@gmail.com>",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder"
