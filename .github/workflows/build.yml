@@ -1,0 +1,35 @@
+name: Build/Release Electron App
+
+on:
+  push:
+    tags:
+      - 'v*' # Se déclenche quand vous créez un tag (ex: v1.0.0)
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        # On utilise les environnements GitHub correspondants
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build & Release Electron App
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # Utilise le token GitHub automatique pour créer la release
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Publie automatiquement les fichiers sur GitHub Release
+          release: true

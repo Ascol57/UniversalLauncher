@@ -1,0 +1,40 @@
+{
+  "name": "nexus-launcher",
+  "version": "1.0.0",
+  "description": "A simple Minecraft launcher built with Electron and minecraft-java-core.",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "dotenv": "^17.2.3",
+    "electron": "^40.0.0",
+    "minecraft-java-core": "^4.2.5"
+  },
+  "build": {
+    "appId": "com.votre.nexus",
+    "productName": "Nexus Launcher",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  }
+}

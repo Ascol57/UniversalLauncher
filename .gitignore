@@ -1,0 +1,6 @@
+minecraft/
+account.json
+last_hash.txt
+package-lock.json
+node_modules/
+.env
