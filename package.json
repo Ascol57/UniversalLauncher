@@ -1,6 +1,6 @@
 {
   "name": "nexus-launcher",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "A simple Minecraft launcher built with Electron and minecraft-java-core.",
   "main": "index.js",
   "author": "Ascol57 <constant.rusche@gmail.com>",
@@ -20,28 +20,19 @@
       "provider": "github",
       "releaseType": "release"
     },
-    "dmg": {
-      "writeUpdateInfo": false
-    },
     "nsis": {
-      "writeUpdateInfo": false
+      "oneClick": true,
+      "perMachine": true,
+      "differentialPackage": false
     },
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ]
+      "target": ["dmg", "zip"]
     },
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "target": ["nsis"]
     },
     "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ]
+      "target": ["AppImage", "deb"]
     }
   },
   "devDependencies": {
