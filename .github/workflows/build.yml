@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         # On utilise les environnements GitHub correspondants
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository

@@ -28,9 +28,6 @@
       "perMachine": true,
       "differentialPackage": false
     },
-    "mac": {
-      "target": ["dmg", "zip"]
-    },
     "linux": {
       "target": ["AppImage", "deb"]
     }
