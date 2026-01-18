@@ -14,20 +14,27 @@
     "minecraft-java-core": "^4.2.5"
   },
   "build": {
-    "appId": "com.votre.nexus",
+    "appId": "fr.ascol.launcher",
     "productName": "Nexus Launcher",
-    "directories": {
-      "output": "dist"
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
     },
-    "win": {
-      "target": [
-        "nsis"
-      ]
+    "dmg": {
+      "writeUpdateInfo": false
+    },
+    "nsis": {
+      "writeUpdateInfo": false
     },
     "mac": {
       "target": [
         "dmg",
         "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
       ]
     },
     "linux": {
