@@ -36,5 +36,8 @@
         "deb"
       ]
     }
+  },
+  "devDependencies": {
+    "electron-builder": "^26.4.0"
   }
 }
