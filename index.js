@@ -5,14 +5,13 @@ const fs = require('fs');
 const https = require('https');
 const env = require('dotenv').config().parsed;
 
-const launcher = new Launch();
-const gamePath = path.join(__dirname, 'minecraft');
-
 const { app, BrowserWindow } = require('electron'); // Ajoutez 'app' ici
+const launcher = new Launch();
+const gamePath = path.join(app.getPath('userData'), 'nexus-minecraft');
 
 // Empêcher l'application de se fermer quand la fenêtre d'auth se ferme
 app.on('window-all-closed', (e) => {
-  e.preventDefault(); 
+    e.preventDefault();
 });
 
 // Fonction personnalisée pour télécharger le ZIP sans erreur
@@ -37,37 +36,43 @@ function downloadFile(url, dest) {
 async function startProject() {
     if (!fs.existsSync(gamePath)) fs.mkdirSync(gamePath, { recursive: true });
 
-    const zipUrl = env.ZIP_URL || "https://localhost/Archive.zip";
-    const hashUrl = env.HASH_URL || "https://localhost/hash.txt";
-    const zipPath = path.join(__dirname, 'temp-modpack.zip');
-    const localHashPath = path.join(__dirname, 'last_hash.txt');
+    if (!env.ZIP_URL || !env.HASH_URL) {
 
-    console.log("=== Système de Mise à jour ===");
+        const zipUrl = env.ZIP_URL;
+        const hashUrl = env.HASH_URL;
+        const zipPath = path.join(__dirname, 'temp-modpack.zip');
+        const localHashPath = path.join(__dirname, 'last_hash.txt');
 
-    try {
-        const response = await fetch(hashUrl);
-        const remoteHash = (await response.text()).trim();
-        let localHash = fs.existsSync(localHashPath) ? fs.readFileSync(localHashPath, 'utf8').trim() : "";
+        console.log("=== Système de Mise à jour ===");
 
-        if (remoteHash !== localHash) {
-            console.log("✨ Nouvelle mise à jour détectée !");
+        try {
+            const response = await fetch(hashUrl);
+            const remoteHash = (await response.text()).trim();
+            let localHash = fs.existsSync(localHashPath) ? fs.readFileSync(localHashPath, 'utf8').trim() : "";
 
-            console.log("📥 Téléchargement du pack (Archive.zip)...");
-            await downloadFile(zipUrl, zipPath); // Utilisation de notre nouvelle fonction
+            if (remoteHash !== localHash) {
+                console.log("✨ Nouvelle mise à jour détectée !");
 
-            console.log("📦 Extraction des fichiers...");
-            const zip = new AdmZip(zipPath);
-            zip.extractAllTo(gamePath, true);
+                console.log("📥 Téléchargement du pack (Archive.zip)...");
+                await downloadFile(zipUrl, zipPath); // Utilisation de notre nouvelle fonction
 
-            fs.writeFileSync(localHashPath, remoteHash);
-            if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
-            console.log("✅ Mise à jour terminée !");
-        } else {
-            console.log("✅ Le modpack est déjà à jour.");
+                console.log("📦 Extraction des fichiers...");
+                const zip = new AdmZip(zipPath);
+                zip.extractAllTo(gamePath, true);
+
+                fs.writeFileSync(localHashPath, remoteHash);
+                if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
+                console.log("✅ Mise à jour terminée !");
+            } else {
+                console.log("✅ Le modpack est déjà à jour.");
+            }
+        } catch (error) {
+            console.error("⚠️ Erreur mise à jour :", error.message);
+            console.log("🚀 Lancement avec les fichiers actuels...");
         }
-    } catch (error) {
-        console.error("⚠️ Erreur mise à jour :", error.message);
-        console.log("🚀 Lancement avec les fichiers actuels...");
+
+    } else {
+        console.error("❌ Erreur : Le serveur n'est pas encore démarré, vous ne pouvez télécharger que le jeu de base.");
     }
 
     // --- Authentification ---
@@ -80,9 +85,9 @@ async function startProject() {
             console.log("🌐 Ouverture de la fenêtre de connexion Microsoft...");
             const ms = new Microsoft();
             mc = await ms.getAuth('electron');
-            
+
             if (!mc) throw new Error("L'authentification a été annulée.");
-            
+
             fs.writeFileSync(accountFile, JSON.stringify(mc, null, 4));
             console.log("✅ Nouveau compte enregistré.");
         } else {
